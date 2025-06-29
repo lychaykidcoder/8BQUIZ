@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 8b - កម្មវិធីសំណួរចម្លើយ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="quiz8b.png">
+</head>
+<body>
+    <div id="modal-overlay" class="modal-overlay" style="display: none;">
+        <div class="modal-content"><h3 id="modal-title"></h3><div id="modal-body"></div></div>
+    </div>
+    <div id="global-notification" class="global-notification" style="display: none;"></div>
+
+    <div id="app-container">
+        <!-- Views: Login, Signup, Home, Admin -->
+        <div id="login-view" class="view"><div class="form-container"><img src="https://i.imgur.com/g5Oq32G.png" alt="Quiz Logo" class="login-logo"><h1>Quiz 8b</h1><h2>ចូលគណនី</h2><input type="email" id="login-email" placeholder="អ៊ីមែល"><input type="password" id="login-password" placeholder="ពាក្យសម្ងាត់"><button id="login-btn">ចូលគណនី</button><button id="go-to-signup-btn" class="secondary-btn">បង្កើតគណនីថ្មី</button><a href="#" class="back-to-home-link">ត្រលប់ទៅទំព័រដើមវិញ</a></div></div>
+        <div id="signup-view" class="view"><div class="form-container"><img src="https://i.imgur.com/g5Oq32G.png" alt="Quiz Logo" class="login-logo"><h2>បង្កើតគណនី</h2><input type="text" id="signup-username" placeholder="ឈ្មោះអ្នកប្រើប្រាស់"><input type="email" id="signup-email" placeholder="អ៊ីមែល"><input type="password" id="signup-password" placeholder="ពាក្យសម្ងាត់"><button id="signup-btn">ចុះឈ្មោះ</button><a href="#" id="back-to-login-link">មានគណនីហើយ? ចូលនៅទីនេះ</a></div></div>
+        <div id="home-view" class="view"><header><div class="logo-container"><img src="quiz8b.png" alt="Quiz Logo" class="header-logo"><h2>Quiz 8b</h2></div><div id="user-actions" class="user-info"></div></header><main id="home-main"><h2>បន្ទប់ដែលអាចចូលរួមបាន</h2><div id="rooms-list"><p>កំពុងស្វែងរកបន្ទប់...</p></div></main></div>
+        <div id="admin-view" class="view"><header><h1>ផ្ទាំងគ្រប់គ្រង</h1><button id="back-to-home-admin-btn">ត្រលប់ទៅទំព័រដើម</button></header><div class="admin-sections"><div class="admin-section create-quiz-section"><h3>បង្កើតកម្រងសំណួរថ្មី</h3><div class="form-group"><input type="text" id="quiz-title" placeholder="ចំណងជើងកម្រងសំណួរ"></div><hr><div class="bot-section"><h4>ប្រើ AI បង្កើតសំណួរពីរូបភាព (អាចជ្រើសរើសច្រើន)</h4><div class="form-group"><input type="file" id="bot-image-upload" accept="image/*" multiple><div id="file-list"></div></div><button id="bot-create-btn">AI បង្កើតសំណួរ</button><div id="bot-status" style="display: none;"><div class="spinner"></div><p>AI កំពុងវិភាគ...</p></div><button id="request-more-ai-btn" style="display:none;" class="secondary-btn">AI បង្កើត 5 សំណួរទៀត</button></div><hr><h4>បញ្ជីសំណួរ</h4><div id="questions-container"></div><button id="add-question-btn">បន្ថែមសំណួរដោយដៃ +</button><hr><button id="save-quiz-btn" class="primary-action-btn">រក្សាទុកកម្រងសំណួរ</button></div><div class="admin-section manage-section"><h3>គ្រប់គ្រងកម្រងសំណួរ</h3><ul id="manage-quizzes-list"></ul><hr><h3>គ្រប់គ្រងអ្នកប្រើប្រាស់</h3><ul id="manage-users-list"></ul><hr><h3>ប្រព័ន្ធផ្សព្វផ្សាយសារ</h3><div class="form-group"><select id="broadcast-recipient"></select></div><textarea id="broadcast-message-input" placeholder="វាយសាររបស់អ្នក..." rows="3"></textarea><button id="send-broadcast-btn">ផ្ញើសារ</button></div></div></div>
+
+        <template id="question-template">
+             <div class="question-editor"><div class="question-header"><h4></h4><button class="remove-question-btn">×</button></div><div class="form-group"><textarea class="question-text" placeholder="តើសំណួររបស់អ្នកគឺជាអ្វី?"></textarea></div><div class="form-group answers-group"><div class="answer-option"><input type="radio" name="correct_answer" value="0"><input type="text" class="answer-text" placeholder="ចម្លើយទី១"></div><div class="answer-option"><input type="radio" name="correct_answer" value="1"><input type="text" class="answer-text" placeholder="ចម្លើយទី២"></div><div class="answer-option"><input type="radio" name="correct_answer" value="2"><input type="text" class="answer-text" placeholder="ចម្លើយទី៣"></div><div class="answer-option"><input type="radio" name="correct_answer" value="3"><input type="text" class="answer-text" placeholder="ចម្លើយទី៤"></div></div></div>
+        </template>
+
+        <!-- [NEW] Quiz Lobby View (Redesigned) -->
+        <div id="quiz-lobby-view" class="view">
+            <div class="lobby-header">
+                <h2 id="lobby-quiz-title">Quiz Title Here</h2>
+                <div class="lobby-join-link-container">
+                    <input type="text" id="lobby-join-link-input" readonly value="Generating link...">
+                    <button id="lobby-copy-link-btn">Copy</button>
+                </div>
+            </div>
+
+            <div class="lobby-content-area">
+                <div class="lobby-player-display">
+                    <h3><span id="player-count">0</span> Players have joined</h3>
+                    <div id="lobby-player-list-main" class="lobby-player-list-main">
+                        <!-- Player items will be injected here by JS -->
+                    </div>
+                </div>
+                <div class="lobby-avatar-picker">
+                    <p>Pick your avatar</p>
+                     <div id="avatar-selection" class="avatar-grid">
+                         <!-- Avatars here -->
+                     </div>
+                </div>
+            </div>
+
+             <div class="lobby-footer">
+                <div class="lobby-player-info">
+                    <img id="player-avatar-display" src="" alt="Avatar" class="player-avatar-large">
+                    <h3 id="player-username-display"></h3>
+                </div>
+                <div class="lobby-admin-controls">
+                    <button id="start-game-btn" style="display: none;">START</button>
+                    <button id="close-room-btn" style="display: none;" class="secondary-btn">Close Room</button>
+                </div>
+                <div id="lobby-wait-message">
+                    Waiting for host to start the game...
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Game View -->
+        <div id="quiz-game-view" class="view">
+            <div id="glitch-overlay" class="glitch-overlay" style="display: none;"></div>
+            <div id="game-feedback-overlay" class="feedback-overlay"><div id="feedback-text"></div><div id="feedback-points"></div></div>
+            <div class="game-overlay" id="countdown-overlay" style="display: none;"><div id="countdown-timer">5</div></div>
+            <div class="game-header"><div class="game-info">សំណួរ <span id="question-number">1</span>/<span id="total-questions">10</span></div><div class="game-info">ពិន្ទុ: <span id="player-score">0</span></div></div>
+            <div class="progress-bar-container"><div class="progress-bar" id="time-bar"></div></div>
+            <div class="question-content"><h2 id="game-question-text"></h2></div>
+            <div id="answer-options-container" class="answer-options"></div>
+            <div class="game-footer"><button id="powerup-glitch-btn" class="powerup-btn powerup-glitch" disabled>Glit<span class="glitch-effect">c</span>h <span id="powerup-glitch-count"></span></button><button id="powerup-shield-btn" class="powerup-btn powerup-shield" disabled>Shield <span id="powerup-shield-count"></span></button><div class="streak-counter">🔥 Streak: <span id="streak-count">0</span></div></div>
+        </div>
+
+        <!-- Leaderboard View (Kahoot Style) -->
+        <div id="leaderboard-view" class="view">
+            <div class="leaderboard-container">
+                <h1>Winners</h1>
+                <div class="podium">
+                    <div class="podium-place place-2">
+                        <div class="podium-rank-badge">2</div>
+                        <div class="podium-details">
+                            <img id="winner-2-avatar" class="podium-avatar">
+                            <div class="podium-name" id="winner-2-name"></div>
+                            <div class="podium-score" id="winner-2-score"></div>
+                        </div>
+                    </div>
+                    <div class="podium-place place-1">
+                        <div class="podium-rank-badge">1</div>
+                        <div class="podium-details">
+                            <img id="winner-1-avatar" class="podium-avatar">
+                            <div class="podium-name" id="winner-1-name"></div>
+                            <div class="podium-score" id="winner-1-score"></div>
+                        </div>
+                    </div>
+                    <div class="podium-place place-3">
+                        <div class="podium-rank-badge">3</div>
+                        <div class="podium-details">
+                            <img id="winner-3-avatar" class="podium-avatar">
+                            <div class="podium-name" id="winner-3-name"></div>
+                            <div class="podium-score" id="winner-3-score"></div>
+                        </div>
+                    </div>
+                </div>
+                <h2>តារាងពិន្ទុ</h2>
+                <ul id="leaderboard-list"></ul>
+                <div id="answer-review-section">
+                    <h3>ពិនិត្យចម្លើយឡើងវិញ</h3>
+                    <div id="answer-review-container"></div>
+                </div>
+                <button id="back-to-home-from-leaderboard-btn">ត្រលប់ទៅទំព័រដើម</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
