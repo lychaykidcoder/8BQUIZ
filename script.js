@@ -1,5 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // API Key របស់អ្នកត្រូវបានដាក់បញ្ចូលរួចរាល់ហើយ
+    //Please don't use my Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAwiZsXwnup77vlCY_RdaW_S7KVXiIPcE", // Paste your secure API Key
+      authDomain: "class8b-quiz-zin.firebaseapp.com",
+      databaseURL: "https://class8b-quiz-zin-default-rtdb.firebaseio.com",
+      projectId: "class8b-quiz-zin",
+      storageBucket: "class8b-quiz-zin.firebasestorage.app",
+      messagingSenderId: "793435657168",
+      appId: "1:793435657168:web:d9901dbe300dba2939dfd5"
+    };
+    // --- Initialize Firebase ---
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
     const GEMINI_API_KEY = 'AIzaSyA-hdZ5GMHLXMgLlqtVizXOCpzg62EJHC8';
     const AVATAR_LIST = [
         'download.jpg', 'spider.jpg', 'gojo.jpg', 'tungtungsahur.jpg',
