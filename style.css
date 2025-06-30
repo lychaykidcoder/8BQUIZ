@@ -56,7 +56,7 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background: url('https://i.imgur.com/8QpJL4g.jpg') no-repeat center center/cover;
+    background: url('purple-anime.gif') no-repeat center center/cover;
     padding: 0;
     justify-content: space-between;
 }
