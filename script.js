@@ -1,20 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Firebase Configuration ---
     const firebaseConfig = {
-        apiKey: "AIzaSyDAwiZsXwnup77vlCY_RdaW_S7KVXiIPcE",
-        authDomain: "class8b-quiz-zin.firebaseapp.com",
-        databaseURL: "https://class8b-quiz-zin-default-rtdb.firebaseio.com",
-        projectId: "class8b-quiz-zin",
-        storageBucket: "class8b-quiz-zin.firebasestorage.app",
-        messagingSenderId: "793435657168",
-        appId: "1:793435657168:web:d9901dbe300dba2939dfd5"
+        apiKey: "AIzaSyDqeV4EtSlkvT47bCHdN4_P55U6kagePzs",
+        authDomain: "quiz-8b-ngs.firebaseapp.com",
+        databaseURL: "https://quiz-8b-ngs-default-rtdb.firebaseio.com",
+        projectId: "quiz-8b-ngs",
+        storageBucket: "quiz-8b-ngs.firebasestorage.app",
+        messagingSenderId: "270361998184",
+        appId: "1:270361998184:web:49a0ebbc2118c055fb1cdd",
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const storage = firebase.storage();
 
     // --- Global Constants & App State ---
-    const GEMINI_API_KEY = 'AIzaSyA-hdZ5GMHLXMgLlqtVizXOCpzg62EJHC8';
+    const GEMINI_API_KEY = 'AIzaSyC3snF41mT0A9hsoz12X6CysV9cMLLlNGM';
     const AVATAR_LIST = ['download.jpg', 'spider.jpg', 'gojo.jpg', 'tungtungsahur.jpg', 'giyu.jpg', 'tanjiro.jpg', 'shinobu.jpg', 'shinobou.jpg'];
     const app = {
         users: [], quizzes: [], rooms: [], currentUser: null, currentRoomId: null,
